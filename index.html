@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VendorCare - نظام إدارة الصيانة والخدمات</title>
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --sidebar: #0f172a;
+            --sidebar-hover: #1e293b;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+        }
+
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border);
+        }
+
+        .logo-area {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .logo-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .badge {
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            text-align: right;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid var(--border);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 8px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--muted);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .alert {
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .alert-error {
+            background: #fef2f2;
+            color: var(--danger);
+            border: 1px solid #fecaca;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            color: var(--success);
+            border: 1px solid #bbf7d0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <div class="logo-area">
+            <div class="logo-title">
+                VendorCare <span class="badge">VC</span>
+            </div>
+            <div class="subtitle">نظام إدارة الصيانة والخدمات للشركات</div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('login')">تسجيل الدخول</button>
+            <button class="tab-btn" onclick="switchTab('createUser')">إنشاء مستخدم شركة</button>
+        </div>
+
+        <!-- نموذج تسجيل الدخول -->
+        <div id="loginForm">
+            <div class="form-group">
+                <label for="loginEmail">اسم المستخدم / البريد الإلكتروني</label>
+                <input type="text" id="loginEmail" placeholder="أدخل البريد الإلكتروني">
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">كلمة المرور</label>
+                <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور">
+            </div>
+            <button class="btn btn-primary" onclick="handleLogin()">دخول إلى النظام</button>
+            <button class="btn btn-secondary" onclick="testConnection()">اختبار اتصال Supabase</button>
+        </div>
+
+        <!-- نموذج إنشاء مستخدم للشركة -->
+        <div id="createUserForm" style="display: none;">
+            <div class="form-group">
+                <label for="companySelect">اختر الشركة</label>
+                <select id="companySelect">
+                    <option value="">جاري تحميل الشركات...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="newUserEmail">البريد الإلكتروني للمستخدم</label>
+                <input type="email" id="newUserEmail" placeholder="user@company.com">
+            </div>
+            <div class="form-group">
+                <label for="newUserPassword">كلمة المرور المؤقتة</label>
+                <input type="password" id="newUserPassword" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+                <label for="userRole">صلاحية المستخدم</label>
+                <select id="userRole">
+                    <option value="company_user">مستخدم عادي</option>
+                    <option value="company_admin">مدير شركة</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="handleCreateUser()">إنشاء الحساب</button>
+        </div>
+
+        <div id="alertBox" class="alert"></div>
+    </div>
+</div>
+
+<script>
+    // الإعدادات الآمنة لـ Supabase دون أخطاء إعادة التعريف
+    window.SUPABASE_URL = window.SUPABASE_URL || 'https://your-supabase-url.supabase.co';
+    window.SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'your-anon-key-here';
+
+    // التهيئة الآمنة للعميل
+    let supabaseClient = null;
+    if (typeof supabase !== 'undefined' && supabase.createClient) {
+        supabaseClient = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+    }
+
+    // التنقل بين التبويبات
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        if (tab === 'login') {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('createUserForm').style.display = 'none';
+            event.target.classList.add('active');
+        } else {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('createUserForm').style.display = 'block';
+            event.target.classList.add('active');
+            loadCompanies();
+        }
+        hideAlert();
+    }
+
+    function showAlert(msg, isSuccess = false) {
+        const alertBox = document.getElementById('alertBox');
+        alertBox.innerText = msg;
+        alertBox.className = 'alert ' + (isSuccess ? 'alert-success' : 'alert-error');
+        alertBox.style.display = 'block';
+    }
+
+    function hideAlert() {
+        document.getElementById('alertBox').style.display = 'none';
+    }
+
+    // اختبار الاتصال
+    async function testConnection() {
+        if (!supabaseClient) {
+            showAlert('لم يتم تحميل مكتبة Supabase بنجاح.');
+            return;
+        }
+        showAlert('جاري الاتصال بـ Supabase...', true);
+        try {
+            const { data, error } = await supabaseClient.from('companies').select('count', { count: 'exact' });
+            if (error) throw error;
+            showAlert('تم الاتصال بـ Supabase بنجاح!', true);
+        } catch (err) {
+            showAlert('فشل الاتصال: ' + err.message);
+        }
+    }
+
+    // تسجيل الدخول
+    async function handleLogin() {
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+
+        if (!email || !password) {
+            showAlert('يرجى إدخال اسم المستخدم وكلمة المرور.');
+            return;
+        }
+
+        showAlert('جاري تسجيل الدخول...', true);
+        try {
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            if (error) throw error;
+            showAlert('تم تسجيل الدخول بنجاح!', true);
+        } catch (err) {
+            showAlert('خطأ في الدخول: ' + err.message);
+        }
+    }
+
+    // تحميل الشركات المتاحة
+    async function loadCompanies() {
+        const select = document.getElementById('companySelect');
+        select.innerHTML = '<option value="">جاري التحميل...</option>';
+        try {
+            const { data, error } = await supabaseClient.from('companies').select('id, name');
+            if (error) throw error;
+
+            select.innerHTML = '<option value="">اختر الشركة</option>';
+            if (data && data.length > 0) {
+                data.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.textContent = c.name;
+                    select.appendChild(opt);
+                });
+            } else {
+                select.innerHTML = '<option value="">لا توجد شركات مضافة</option>';
+            }
+        } catch (err) {
+            select.innerHTML = '<option value="">تعذر تحميل الشركات</option>';
+        }
+    }
+
+    // إنشاء مستخدم للشركة
+    async function handleCreateUser() {
+        const companyId = document.getElementById('companySelect').value;
+        const email = document.getElementById('newUserEmail').value;
+        const password = document.getElementById('newUserPassword').value;
+        const role = document.getElementById('userRole').value;
+
+        if (!companyId || !email || !password) {
+            showAlert('يرجى ملء جميع الحقول المطلوبة.');
+            return;
+        }
+
+        showAlert('جاري إنشاء الحساب...', true);
+        try {
+            const { data, error } = await supabaseClient.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: { company_id: companyId, role: role }
+                }
+            });
+            if (error) throw error;
+            showAlert('تم إنشاء حساب المستخدم بنجاح!', true);
+        } catch (err) {
+            showAlert('فشل إنشاء الحساب: ' + err.message);
+        }
+    }
+</script>
+</body>
+</html>
