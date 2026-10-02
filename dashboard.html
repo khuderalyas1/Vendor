@@ -3,67 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم الفائقة - VendorCare Ultimate Pro</title>
+    <title>VendorCare Ultimate Pro - لوحة التحكم الشاملة</title>
     <!-- Bootstrap 5 RTL CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
-    <!-- FontAwesome Icons -->
+    <!-- FontAwesome 6 Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts - Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary-bg: #0f172a;
-            --card-bg: #ffffff;
-            --accent-color: #0d6efd;
-            --success-color: #198754;
-            --warning-color: #ffc107;
+            --bg-dark: #0b0f19;
+            --bg-card: #151c2c;
+            --accent-primary: #3b82f6;
+            --accent-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            --info-gradient: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.08);
         }
+
         body {
             font-family: 'Cairo', sans-serif;
-            background-color: #f1f5f9;
-            color: #1e293b;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
         }
-        .navbar-custom {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+
+        /* ----- شاشة تسجيل الدخول ----- */
+        #loginSection {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 50%, #020617 100%);
+            position: relative;
         }
-        .stat-card {
-            border: none;
-            border-radius: 20px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: var(--card-bg);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+
+        .login-card {
+            background: rgba(21, 28, 44, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 28px;
+            padding: 40px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
-        .stat-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.08);
-        }
-        .company-card {
-            border: none;
-            border-radius: 20px;
+
+        .login-input-group {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
             transition: all 0.3s ease;
-            background: #ffffff;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-            border-top: 5px solid var(--accent-color);
+        }
+
+        .login-input-group:focus-within {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .login-input-group .form-control {
+            background: transparent;
+            border: none;
+            color: #fff;
+            padding: 12px 15px;
+        }
+
+        .login-input-group .form-control:focus {
+            box-shadow: none;
+        }
+
+        .login-input-group .input-group-text {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+        }
+
+        /* ----- الشريط العلوي (Navbar) ----- */
+        .navbar-custom {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* ----- بطاقات الإحصائيات ----- */
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
+
+        .stat-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        /* ----- بطاقات الشركات ----- */
+        .company-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
         .company-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border-color: rgba(59, 130, 246, 0.4);
         }
-        .badge-status {
-            padding: 8px 14px;
+
+        .badge-status-active {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 6px 14px;
             border-radius: 30px;
-            font-size: 0.82rem;
             font-weight: 700;
+            font-size: 0.8rem;
         }
-        .modal-content {
-            border-radius: 24px;
+
+        .badge-status-expired {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        /* ----- الأزرار الاحترافية ----- */
+        .btn-custom-primary {
+            background: var(--accent-gradient);
+            color: white;
             border: none;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border-radius: 12px;
+            font-weight: 700;
+            transition: all 0.3s;
         }
+        .btn-custom-primary:hover {
+            opacity: 0.9;
+            transform: scale(1.01);
+            color: white;
+        }
+
+        .btn-custom-success {
+            background: var(--success-gradient);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        .btn-custom-success:hover { color: white; opacity: 0.9; }
+
+        .btn-custom-warning {
+            background: var(--warning-gradient);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        .btn-custom-warning:hover { color: white; opacity: 0.9; }
+
+        .btn-custom-danger {
+            background: var(--danger-gradient);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        .btn-custom-danger:hover { color: white; opacity: 0.9; }
+
+        /* ----- النوافذ المنبثقة Modals ----- */
+        .modal-content {
+            background-color: #1e293b;
+            color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+        }
+        .modal-header { border-bottom: 1px solid var(--border-color); }
+        .modal-footer { border-top: 1px solid var(--border-color); }
+
+        .form-control, .form-select {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: #fff !important;
+            border-radius: 12px;
+            padding: 10px 14px;
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+        .form-select option {
+            background-color: #1e293b;
+            color: #fff;
+        }
+
+        /* الكاميرا */
         #cameraStream {
             width: 100%;
             height: 280px;
@@ -77,214 +238,290 @@
             left: 15%;
             width: 70%;
             height: 60%;
-            border: 2px dashed #0ea5e9;
+            border: 2px dashed #3b82f6;
             border-radius: 12px;
-            box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.5);
         }
-        .feature-box {
-            border-radius: 16px;
-            padding: 20px;
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s;
-        }
-        .feature-box:hover {
-            border-color: var(--accent-color);
-            box-shadow: 0 10px 20px rgba(13, 110, 253, 0.1);
-        }
+
+        /* النقطة الحية Live Indicator */
         .live-dot {
             width: 10px;
             height: 10px;
-            background-color: #22c55e;
+            background-color: #10b981;
             border-radius: 50%;
             display: inline-block;
-            box-shadow: 0 0 8px #22c55e;
+            box-shadow: 0 0 10px #10b981;
             animation: pulse 1.5s infinite;
         }
         @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        .feature-card:hover {
+            border-color: var(--accent-primary);
+            background: rgba(255, 255, 255, 0.06);
         }
     </style>
 </head>
 <body>
 
-    <!-- الشريط العلوي - مالك المنصة -->
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top py-3">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-                <i class="fa-solid fa-shield-cat text-info fs-2"></i>
-                <span class="fs-4 fw-bold text-white">VendorCare <span class="badge bg-info text-dark fs-6">Ultimate Pro</span></span>
-            </a>
-            
-            <div class="d-flex align-items-center gap-3">
-                <div class="bg-white bg-opacity-10 px-3 py-1 rounded-pill d-flex align-items-center gap-2 border border-light border-opacity-10">
-                    <span class="live-dot"></span>
-                    <span class="text-light small fw-bold">تحديث تلقائي حي</span>
+    <!-- ============================================== -->
+    <!-- 1. واجهة تسجيل الدخول (LOGIN SCREEN) -->
+    <!-- ============================================== -->
+    <div id="loginSection">
+        <div class="login-card">
+            <div class="text-center mb-4">
+                <div class="stat-icon bg-primary bg-opacity-20 text-primary mx-auto mb-3" style="width:70px; height:70px; font-size:2rem;">
+                    <i class="fa-solid fa-shield-cat"></i>
                 </div>
-                <button class="btn btn-warning rounded-pill px-3 btn-sm fw-bold" onclick="openCameraModal()">
-                    <i class="fa-solid fa-camera me-1"></i> ماسح الفواتير 📷
-                </button>
-                <div class="d-none d-md-flex align-items-center bg-white bg-opacity-10 px-3 py-2 rounded-pill border border-light border-opacity-10">
-                    <i class="fa-solid fa-crown text-warning me-2 fs-5"></i>
-                    <span class="text-light small">مالك المنصة: <strong id="ownerName">خضير العياس</strong></span>
+                <h3 class="fw-bold text-white mb-1">VendorCare Pro</h3>
+                <p class="text-muted small">تسجيل الدخول للوحة المنصة الفائقة</p>
+            </div>
+
+            <div id="loginAlert" class="alert alert-danger d-none py-2 px-3 small rounded-3 mb-3">
+                <i class="fa-solid fa-triangle-exclamation me-1"></i> اسم المستخدم أو كلمة المرور غير صحيحة!
+            </div>
+
+            <form onsubmit="handleLogin(event)">
+                <div class="mb-3">
+                    <label class="form-label small text-muted fw-bold">اسم المستخدم</label>
+                    <div class="input-group login-input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                        <input type="text" id="loginUser" class="form-control" placeholder="اسم المستخدم" value="khudair" required>
+                    </div>
                 </div>
-                <button class="btn btn-outline-danger btn-sm rounded-pill px-3 text-white border-light" onclick="logout()">
-                    <i class="fa-solid fa-power-off me-1"></i> خروج
+
+                <div class="mb-4">
+                    <label class="form-label small text-muted fw-bold">كلمة المرور</label>
+                    <div class="input-group login-input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                        <input type="password" id="loginPass" class="form-control" placeholder="••••••••" value="123456" required>
+                        <button type="button" class="btn text-muted" onclick="togglePassView()"><i class="fa-solid fa-eye" id="passEye"></i></button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-custom-primary w-100 py-3 fw-bold" id="btnLogin">
+                    <i class="fa-solid fa-right-to-bracket me-2"></i> دخول النظام
                 </button>
+            </form>
+
+            <div class="text-center mt-4 border-top border-secondary border-opacity-20 pt-3">
+                <span class="text-muted extra-small">الحساب الافتراضي: <strong>khudair</strong> | كلمة المرور: <strong>123456</strong></span>
             </div>
         </div>
-    </nav>
-
-    <!-- المحتوى الرئيسي -->
-    <div class="container-fluid px-4 py-4">
-
-        <!-- الإحصائيات السريعة -->
-        <div class="row g-3 mb-4">
-            <div class="col-md-3">
-                <div class="card stat-card p-3">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <span class="text-muted small fw-semibold">إجمالي الشركات</span>
-                            <h3 class="fw-extrabold mb-0 mt-1" id="totalCompanies">0</h3>
-                        </div>
-                        <div class="bg-primary bg-opacity-10 p-3 rounded-4 text-primary">
-                            <i class="fa-solid fa-building-circle-check fs-3"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card stat-card p-3">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <span class="text-muted small fw-semibold">الاشتراكات النشطة</span>
-                            <h3 class="fw-extrabold text-success mb-0 mt-1" id="activeSubs">0</h3>
-                        </div>
-                        <div class="bg-success bg-opacity-10 p-3 rounded-4 text-success">
-                            <i class="fa-solid fa-bolt fs-3"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card stat-card p-3">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <span class="text-muted small fw-semibold">الضمانات المالية</span>
-                            <h3 class="fw-extrabold text-warning mb-0 mt-1" id="totalGuarantees">$0</h3>
-                        </div>
-                        <div class="bg-warning bg-opacity-10 p-3 rounded-4 text-warning">
-                            <i class="fa-solid fa-vault fs-3"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card stat-card p-3">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <span class="text-muted small fw-semibold">أرباح المنصة</span>
-                            <h3 class="fw-extrabold text-info mb-0 mt-1" id="platformRevenue">$0</h3>
-                        </div>
-                        <div class="bg-info bg-opacity-10 p-3 rounded-4 text-info">
-                            <i class="fa-solid fa-chart-line fs-3"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- شريط التحكم والأدوات -->
-        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-            <div>
-                <h4 class="fw-bold m-0">إدارة الشركات والاشتراكات</h4>
-                <p class="text-muted small m-0">إدارة العقود، الضمانات المصرفية، ومتابعة الأنشطة المباشرة</p>
-            </div>
-            <div class="d-flex gap-2">
-                <button class="btn btn-outline-dark rounded-pill px-3" onclick="window.print()">
-                    <i class="fa-solid fa-print me-1"></i> طباعة التقرير
-                </button>
-                <button class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#addCompanyModal">
-                    <i class="fa-solid fa-plus me-1"></i> إضافة شركة جديدة
-                </button>
-            </div>
-        </div>
-
-        <!-- شبكة عرض الشركات -->
-        <div class="row g-4" id="companiesGrid"></div>
     </div>
 
-    <!-- نافذة ماسح الكاميرا للفواتير -->
+    <!-- ============================================== -->
+    <!-- 2. لوحة التحكم الرئيسية (DASHBOARD) -->
+    <!-- ============================================== -->
+    <div id="dashboardSection" class="d-none">
+        
+        <!-- الشريط العلوي -->
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top py-3">
+            <div class="container-fluid px-4">
+                <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                    <i class="fa-solid fa-shield-cat text-primary fs-2"></i>
+                    <span class="fs-4 fw-extrabold text-white">VendorCare <span class="badge bg-primary text-white fs-6 ms-1">Ultimate</span></span>
+                </a>
+
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-dark bg-opacity-50 px-3 py-1 rounded-pill d-flex align-items-center gap-2 border border-secondary border-opacity-20">
+                        <span class="live-dot"></span>
+                        <span class="text-light small fw-semibold">مزامنة حية</span>
+                    </div>
+
+                    <button class="btn btn-custom-warning btn-sm px-3 py-2 rounded-pill" onclick="openCameraModal()">
+                        <i class="fa-solid fa-camera me-1"></i> ماسح الفواتير 📷
+                    </button>
+
+                    <div class="d-none d-md-flex align-items-center bg-dark bg-opacity-50 px-3 py-2 rounded-pill border border-secondary border-opacity-20">
+                        <i class="fa-solid fa-crown text-warning me-2 fs-5"></i>
+                        <span class="text-light small">المالك: <strong id="ownerName" class="text-info">خضير العياس</strong></span>
+                    </div>
+
+                    <button class="btn btn-outline-danger btn-sm rounded-pill px-3 py-2" onclick="logout()">
+                        <i class="fa-solid fa-power-off me-1"></i> خروج
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- المحتوى الداخلي -->
+        <div class="container-fluid px-4 py-4">
+
+            <!-- كروت الإحصائيات الفاخرة -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-muted small fw-bold">إجمالي الشركات</span>
+                                <h2 class="fw-extrabold mb-0 mt-1 text-white" id="totalCompanies">0</h2>
+                            </div>
+                            <div class="stat-icon bg-primary bg-opacity-10 text-primary">
+                                <i class="fa-solid fa-building"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-muted small fw-bold">الاشتراكات النشطة</span>
+                                <h2 class="fw-extrabold mb-0 mt-1 text-success" id="activeSubs">0</h2>
+                            </div>
+                            <div class="stat-icon bg-success bg-opacity-10 text-success">
+                                <i class="fa-solid fa-bolt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-muted small fw-bold">الضمانات المصرفية</span>
+                                <h2 class="fw-extrabold mb-0 mt-1 text-warning" id="totalGuarantees">$0</h2>
+                            </div>
+                            <div class="stat-icon bg-warning bg-opacity-10 text-warning">
+                                <i class="fa-solid fa-vault"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-muted small fw-bold">أرباح المنصة</span>
+                                <h2 class="fw-extrabold mb-0 mt-1 text-info" id="platformRevenue">$0</h2>
+                            </div>
+                            <div class="stat-icon bg-info bg-opacity-10 text-info">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- شريط الأدوات والتحكم -->
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                <div>
+                    <h4 class="fw-extrabold text-white m-0">إدارة الشركات والاشتراكات</h4>
+                    <p class="text-muted small m-0">متابعة العقود، الضمانات المصرفية، وتشغيل البرامج المباشرة</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-light rounded-pill px-3" onclick="window.print()">
+                        <i class="fa-solid fa-print me-1"></i> طباعة التقرير
+                    </button>
+                    <button class="btn btn-custom-primary rounded-pill px-4 py-2 fw-bold" onclick="openAddModal()">
+                        <i class="fa-solid fa-plus me-1"></i> إضافة شركة جديدة
+                    </button>
+                </div>
+            </div>
+
+            <!-- شريط البحث الفوري -->
+            <div class="row mb-4">
+                <div class="col-md-6 offset-md-3">
+                    <div class="input-group shadow-lg rounded-pill overflow-hidden border border-secondary border-opacity-20">
+                        <span class="input-group-text bg-dark border-0 ps-4 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" id="searchInput" class="form-control bg-dark border-0 py-3 pe-4 text-white" placeholder="ابحث باسم الشركة أو القطاع..." onkeyup="filterCompanies()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- شبكة الشركات -->
+            <div class="row g-4" id="companiesGrid"></div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 3. النوافذ المنبثقة (MODALS) -->
+    <!-- ============================================== -->
+
+    <!-- نافذة الكاميرا للماسح الضوئي -->
     <div class="modal fade" id="cameraModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-dark text-white rounded-top-4">
-                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-camera me-2 text-warning"></i>ماسح الفواتير التلقائي (الكاميرا)</h5>
-                    <button type="button" class="btn-close btn-close-white" onclick="stopCamera()" data-bs-dismiss="modal"></button>
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-white"><i class="fa-solid fa-camera text-warning me-2"></i>ماسح الفواتير التلقائي</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body text-center p-4">
                     <div class="position-relative overflow-hidden mb-3">
                         <video id="cameraStream" autoplay playsinline></video>
                         <div class="scanner-overlay"></div>
                     </div>
-                    <p class="text-muted small mb-3">وجه الكاميرا نحو باركود الفاتورة أو وصل الضمان المالي لمسحه فوراً</p>
-                    <button class="btn btn-success rounded-pill px-4 fw-bold w-100" onclick="simulateScan()">
-                        <i class="fa-solid fa-barcode me-2"></i> التقاط وقراءة الفاتورة تلقائياً
+                    <p class="text-muted small mb-3">وجه الكاميرا نحو باركود الفاتورة أو وثيقة الضمان المالي</p>
+                    <button class="btn btn-custom-success w-100 py-3 fw-bold" onclick="simulateScan()">
+                        <i class="fa-solid fa-barcode me-2"></i> قراءة وتوثيق الفاتورة فوراً
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- نافذة إضافة شركة جديدة -->
+    <!-- نافذة إضافة / تعديل شركة -->
     <div class="modal fade" id="addCompanyModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-dark text-white rounded-top-4">
-                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-building-circle-check me-2 text-info"></i>تسجيل شركة جديدة بالمنصة</h5>
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-white" id="companyModalTitle"><i class="fa-solid fa-building-circle-check text-info me-2"></i>تسجيل شركة جديدة</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
                     <form id="addCompanyForm" onsubmit="saveCompany(event)">
+                        <input type="hidden" id="editIndex" value="-1">
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">اسم الشركة</label>
-                                <input type="text" id="compName" class="form-control rounded-3" required placeholder="شركة بابل للتوريدات">
+                                <label class="form-label small text-muted fw-bold">اسم الشركة</label>
+                                <input type="text" id="compName" class="form-control" required placeholder="شركة بابل للتوريدات">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">قطاع العمل</label>
-                                <input type="text" id="compSector" class="form-control rounded-3" required placeholder="التجارة العامة والمقاولات">
+                                <label class="form-label small text-muted fw-bold">قطاع العمل</label>
+                                <input type="text" id="compSector" class="form-control" required placeholder="التجارة العامة والمقاولات">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">بداية الاشتراك</label>
-                                <input type="date" id="subStart" class="form-control rounded-3" required>
+                                <label class="form-label small text-muted fw-bold">تاريخ بدء الاشتراك</label>
+                                <input type="date" id="subStart" class="form-control" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">نهاية الاشتراك</label>
-                                <input type="date" id="subEnd" class="form-control rounded-3" required>
+                                <label class="form-label small text-muted fw-bold">تاريخ نهاية الاشتراك</label>
+                                <input type="date" id="subEnd" class="form-control" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">رسوم الاشتراك ($)</label>
-                                <input type="number" id="subPrice" class="form-control rounded-3" required placeholder="1500">
+                                <label class="form-label small text-muted fw-bold">رسوم الاشتراك ($)</label>
+                                <input type="number" id="subPrice" class="form-control" required placeholder="1800">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">مبلغ الضمان المالي ($)</label>
-                                <input type="number" id="guaranteeAmount" class="form-control rounded-3" required placeholder="5000">
+                                <label class="form-label small text-muted fw-bold">قيمة الضمان المالي ($)</label>
+                                <input type="number" id="guaranteeAmount" class="form-control" required placeholder="10000">
                             </div>
                             <div class="col-md-12">
-                                <label class="form-label fw-bold">نوع الضمان المقدم</label>
-                                <select id="guaranteeType" class="form-select rounded-3">
+                                <label class="form-label small text-muted fw-bold">نوع الضمان المقدم</label>
+                                <select id="guaranteeType" class="form-select">
                                     <option value="خطاب ضمان بنكي">خطاب ضمان بنكي (Bank Guarantee)</option>
-                                    <option value="عربون نقدي مالي">عربون نقدي أمانة (Cash Deposit)</option>
+                                    <option value="عربون نقدي أمانة">عربون نقدي أمانة (Cash Deposit)</option>
                                     <option value="صك مصدق برسم أمانة">صك مصدق برسم أمانة (Certified Cheque)</option>
                                 </select>
                             </div>
                         </div>
                         <div class="mt-4 text-end">
-                            <button type="button" class="btn btn-light px-4 rounded-pill" data-bs-dismiss="modal">إلغاء</button>
-                            <button type="submit" class="btn btn-success px-4 rounded-pill fw-bold">حفظ وتفعيل الاشتراك</button>
+                            <button type="button" class="btn btn-outline-light px-4 rounded-pill me-2" data-bs-dismiss="modal">إلغاء</button>
+                            <button type="submit" class="btn btn-custom-primary px-4 rounded-pill" id="saveCompanyBtn">حفظ وتفعيل الاشتراك</button>
                         </div>
                     </form>
                 </div>
@@ -292,86 +529,86 @@
         </div>
     </div>
 
-    <!-- نافذة البيئة التشغيلية ومميزات الشركة المشتركة -->
+    <!-- نافذة البرنامج التشغيلي والمميزات -->
     <div class="modal fade" id="companyProgramModal" tabindex="-1">
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
-                <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title fw-bold" id="programTitle"><i class="fa-solid fa-laptop-code me-2 text-info"></i>لوحة تشغيل الشركة</h5>
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-white" id="programTitle"><i class="fa-solid fa-laptop-code me-2 text-info"></i>لوحة التشغيل</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body bg-light p-4">
+                <div class="modal-body p-4" style="background-color: var(--bg-dark);">
                     <div class="container">
-                        <div class="alert alert-success d-flex align-items-center rounded-4 shadow-sm" role="alert">
-                            <i class="fa-solid fa-circle-check fs-2 me-3"></i>
-                            <div>
-                                <strong class="fs-5">البيئة التشغيلية والمميزات الفائقة مفعلة بالكامل!</strong>
-                                <div>جميع أدوات المبيعات، رابط المتجر، الباركوود، والتقارير متاحة لهذه الشركة.</div>
+                        <div class="alert bg-success bg-opacity-10 border border-success border-opacity-30 text-white rounded-4 p-4 mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <i class="fa-solid fa-circle-check fs-1 text-success"></i>
+                                <div>
+                                    <h5 class="fw-bold mb-1">البيئة التشغيلية مفعلة بنجاح!</h5>
+                                    <p class="text-muted small m-0">تم الربط الفوري بكافة أدوات التوريد، نظام المبيعات، ورابط المتجر الخاص بـ هذه الشركة.</p>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- أدوات التشغيل الأساسية -->
-                        <h5 class="fw-bold my-3"><i class="fa-solid fa-cubes text-primary me-2"></i>أنظمة الإدارة الأساسية:</h5>
+                        <h5 class="fw-bold text-white mb-3"><i class="fa-solid fa-cubes text-primary me-2"></i>أنظمة الإدارة والتوريد:</h5>
                         <div class="row g-3 mb-4">
                             <div class="col-md-4">
-                                <div class="feature-box text-center shadow-sm">
+                                <div class="feature-card text-center">
                                     <i class="fa-solid fa-boxes-stacked text-primary fs-1 mb-3"></i>
-                                    <h5 class="fw-bold">المخزون والمنتجات</h5>
-                                    <p class="text-muted small">متابعة الكميات الجاهزة للتوريد والطلب</p>
-                                    <button class="btn btn-primary btn-sm rounded-pill px-4" onclick="alert('جاري فتح قاعدة مخازن الشركة...')">تشغيل الوحدة</button>
+                                    <h5 class="fw-bold text-white">إدارة المخزون</h5>
+                                    <p class="text-muted small">متابعة الكميات الجاهزة للتوريد</p>
+                                    <button class="btn btn-custom-primary btn-sm px-4" onclick="alert('جاري تشغيل نظام المخزون...')">فتح المخزن</button>
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="feature-box text-center shadow-sm">
+                                <div class="feature-card text-center">
                                     <i class="fa-solid fa-receipt text-success fs-1 mb-3"></i>
-                                    <h5 class="fw-bold">الفواتير الذكية</h5>
-                                    <p class="text-muted small">إصدار الفواتير وقراءتها بالكاميرا</p>
-                                    <button class="btn btn-success btn-sm rounded-pill px-4" onclick="openCameraModal()">مسح فاتورة جديدة 📷</button>
+                                    <h5 class="fw-bold text-white">الفواتير الذكية</h5>
+                                    <p class="text-muted small">إصدار ومسح الفواتير بالذكاء الاصطناعي</p>
+                                    <button class="btn btn-custom-success btn-sm px-4" onclick="openCameraModal()">مسح فاتورة جديدة 📷</button>
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="feature-box text-center shadow-sm">
+                                <div class="feature-card text-center">
                                     <i class="fa-solid fa-users-gear text-warning fs-1 mb-3"></i>
-                                    <h5 class="fw-bold">فريق العمل والصلاحيات</h5>
-                                    <p class="text-muted small">إدارة الموظفين وأذونات الوصول</p>
-                                    <button class="btn btn-warning btn-sm rounded-pill px-4" onclick="alert('جاري عرض شجرة الموظفين...')">عرض الكادر</button>
+                                    <h5 class="fw-bold text-white">فريق العمل</h5>
+                                    <p class="text-muted small">إدارة الصلاحيات والكوادر</p>
+                                    <button class="btn btn-custom-warning btn-sm px-4" onclick="alert('جاري عرض شجرة الكادر...')">إدارة الفريق</button>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- باقة المميزات الحصرية المضافة للشركة -->
-                        <h5 class="fw-bold my-3"><i class="fa-solid fa-star text-warning me-2"></i>المميزات الحصرية المتاحة للشركة المشتركة:</h5>
+                        <h5 class="fw-bold text-white mb-3"><i class="fa-solid fa-star text-warning me-2"></i>المميزات الحصرية المتاحة:</h5>
                         <div class="row g-3">
                             <div class="col-md-3">
-                                <div class="card p-3 border-0 shadow-sm rounded-4 text-center">
+                                <div class="feature-card text-center">
                                     <i class="fa-solid fa-store text-info fs-2 mb-2"></i>
-                                    <h6 class="fw-bold">رابط متجر إلكتروني</h6>
-                                    <p class="text-muted extra-small">رابط خاص لمشاركة المنتجات مع العملاء</p>
-                                    <button class="btn btn-outline-info btn-sm rounded-pill" onclick="alert('تم نسخ رابط المتجر الإلكتروني الخاص بالشركة!')"><i class="fa-solid fa-link me-1"></i>نسخ الرابط</button>
+                                    <h6 class="fw-bold text-white">رابط المتجر</h6>
+                                    <p class="text-muted extra-small">صفحة عرض المنتجات للعملاء</p>
+                                    <button class="btn btn-outline-info btn-sm rounded-pill" onclick="alert('تم نسخ رابط المتجر بنجاح!')">نسخ الرابط</button>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="card p-3 border-0 shadow-sm rounded-4 text-center">
-                                    <i class="fa-solid fa-qrcode text-dark fs-2 mb-2"></i>
-                                    <h6 class="fw-bold">رمز QR للشركة</h6>
-                                    <p class="text-muted extra-small">رمز استجابة سريع يوضع على المطبوعات</p>
-                                    <button class="btn btn-outline-dark btn-sm rounded-pill" onclick="alert('جاري تحميل كود الـ QR الخاص بالشركة...')"><i class="fa-solid fa-download me-1"></i>تحميل الـ QR</button>
+                                <div class="feature-card text-center">
+                                    <i class="fa-solid fa-qrcode text-light fs-2 mb-2"></i>
+                                    <h6 class="fw-bold text-white">رمز QR الخاص</h6>
+                                    <p class="text-muted extra-small">رمز استجابة سريع للمطبوعات</p>
+                                    <button class="btn btn-outline-light btn-sm rounded-pill" onclick="alert('جاري تحضير ملف الـ QR...')">تحميل QR</button>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="card p-3 border-0 shadow-sm rounded-4 text-center">
+                                <div class="feature-card text-center">
                                     <i class="fa-solid fa-file-excel text-success fs-2 mb-2"></i>
-                                    <h6 class="fw-bold">تصدير تقارير Excel</h6>
-                                    <p class="text-muted extra-small">تصدير الفواتير والعمليات اليومية</p>
-                                    <button class="btn btn-outline-success btn-sm rounded-pill" onclick="alert('تم تصدير كشف الحساب والعمليات إلى ملف Excel بنجاح!')"><i class="fa-solid fa-file-export me-1"></i>تصدير الكشف</button>
+                                    <h6 class="fw-bold text-white">تصدير Excel</h6>
+                                    <p class="text-muted extra-small">تصدير الفواتير اليومية</p>
+                                    <button class="btn btn-outline-success btn-sm rounded-pill" onclick="alert('تم تصدير ملف Excel بنجاح!')">تصدير الكشف</button>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="card p-3 border-0 shadow-sm rounded-4 text-center">
+                                <div class="feature-card text-center">
                                     <i class="fa-solid fa-headset text-danger fs-2 mb-2"></i>
-                                    <h6 class="fw-bold">الدعم الفني المباشر</h6>
-                                    <p class="text-muted extra-small">تواصل مباشر وسريع مع إدارة المنصة</p>
-                                    <button class="btn btn-outline-danger btn-sm rounded-pill" onclick="alert('جاري تحويلك لفتح تذكرة دعم مباشر مع المالك...')"><i class="fa-solid fa-comments me-1"></i>تواصل الآن</button>
+                                    <h6 class="fw-bold text-white">الدعم الفني المباشر</h6>
+                                    <p class="text-muted extra-small">تواصل مع إدارة المنصة</p>
+                                    <button class="btn btn-outline-danger btn-sm rounded-pill" onclick="alert('جاري فتح تذكرة دعم مباشر...')">تواصل الآن</button>
                                 </div>
                             </div>
                         </div>
@@ -389,12 +626,12 @@
         let videoStream = null;
         let lastKnownData = "";
 
-        // البيانات التفاعلية
-        let companies = JSON.parse(localStorage.getItem('vendor_companies_v2')) || [
+        // البيانات المبدئية للشركات
+        let companies = JSON.parse(localStorage.getItem('vendor_companies_v3')) || [
             {
                 id: 1,
-                name: "شركة الرافدين للتجارة العامة",
-                sector: "التوريدات والحلول اللوجستية",
+                name: "شركة الرافدين للتوريدات",
+                sector: "الخدمات اللوجستية والتجهيزات",
                 start: "2026-01-01",
                 end: "2026-12-31",
                 price: 1800,
@@ -403,89 +640,142 @@
             },
             {
                 id: 2,
-                name: "مؤسسة دجلة للتكنولوجيا",
-                sector: "الأنظمة والذكاء الاصطناعي",
+                name: "مؤسسة دجلة للتقنية",
+                sector: "أنظمة وبرمجيات الذكاء الاصطناعي",
                 start: "2026-02-15",
                 end: "2026-11-15",
                 price: 2500,
                 guarantee: 20000,
-                guaranteeType: "عربون نقدي مالي"
+                guaranteeType: "عربون نقدي أمانة"
             }
         ];
 
         document.addEventListener('DOMContentLoaded', () => {
-            renderCompanies();
-            updateStats();
-            
-            // تفعيل نظام المزامنة والتحديث التلقائي الحي كل 3 ثوانٍ
+            // التحقق من تسجيل الدخول السابق
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                showDashboard();
+            }
+
+            // إيقاف الكاميرا تلقائياً عند إغلاق النوافذ المنبثقة
+            document.getElementById('cameraModal').addEventListener('hidden.bs.modal', function () {
+                stopCamera();
+            });
+
+            // مزامنة البيانات تلقائياً
             setInterval(autoSyncData, 3000);
         });
 
-        // آلية التحديث والمزامنة التلقائية الحية
-        function autoSyncData() {
-            const currentData = localStorage.getItem('vendor_companies_v2');
-            if (currentData && currentData !== lastKnownData) {
-                companies = JSON.parse(currentData);
-                renderCompanies();
-                updateStats();
-                lastKnownData = currentData;
+        // ----- تسجيل الدخول والخروج -----
+        function handleLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+
+            if ((user === 'khudair' || user === 'admin') && pass === '123456') {
+                localStorage.setItem('isLoggedIn', 'true');
+                showDashboard();
+            } else {
+                const alertEl = document.getElementById('loginAlert');
+                alertEl.classList.remove('d-none');
+                setTimeout(() => alertEl.classList.add('d-none'), 3000);
             }
         }
 
-        // عرض بطاقات الشركات
-        function renderCompanies() {
+        function showDashboard() {
+            document.getElementById('loginSection').classList.add('d-none');
+            document.getElementById('dashboardSection').classList.remove('d-none');
+            renderCompanies();
+            updateStats();
+        }
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            document.getElementById('dashboardSection').classList.add('d-none');
+            document.getElementById('loginSection').classList.remove('d-none');
+        }
+
+        function togglePassView() {
+            const passInput = document.getElementById('loginPass');
+            const passEye = document.getElementById('passEye');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                passEye.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passInput.type = 'password';
+                passEye.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // ----- عرض الشركات والتصفية -----
+        function renderCompanies(listToRender = companies) {
             const grid = document.getElementById('companiesGrid');
             grid.innerHTML = '';
 
-            companies.forEach((comp, index) => {
+            if (listToRender.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <div class="bg-card rounded-4 p-5 border border-secondary border-opacity-20">
+                            <i class="fa-solid fa-folder-open fs-1 text-muted mb-3 opacity-50"></i>
+                            <h5 class="fw-bold text-white">لا توجد نتائج مطابقة</h5>
+                            <p class="text-muted small mb-3">لم نتمكن من العثور على أي شركة، قم بإضافة شركة جديدة للبدء.</p>
+                            <button class="btn btn-custom-primary rounded-pill px-4 btn-sm" onclick="openAddModal()">
+                                <i class="fa-solid fa-plus me-1"></i> إضافة شركة جديدة
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            listToRender.forEach((comp) => {
+                const originalIndex = companies.findIndex(c => c.id === comp.id);
                 const isActive = new Date(comp.end) >= new Date();
                 const statusBadge = isActive 
-                    ? `<span class="badge bg-success-subtle text-success badge-status"><i class="fa-solid fa-circle-check me-1"></i>اشتراك نشط</span>`
-                    : `<span class="badge bg-danger-subtle text-danger badge-status"><i class="fa-solid fa-circle-xmark me-1"></i>منتهي</span>`;
+                    ? `<span class="badge-status-active"><i class="fa-solid fa-circle-check me-1"></i>نشط</span>`
+                    : `<span class="badge-status-expired"><i class="fa-solid fa-circle-xmark me-1"></i>منتهي</span>`;
 
                 grid.innerHTML += `
                     <div class="col-md-6 col-lg-4">
-                        <div class="card company-card p-4">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div class="company-card">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
                                 <div>
-                                    <h5 class="fw-bold mb-1 text-dark">${comp.name}</h5>
-                                    <span class="text-muted small"><i class="fa-solid fa-layer-group me-1"></i>${comp.sector}</span>
+                                    <h5 class="fw-bold text-white mb-1">${comp.name}</h5>
+                                    <span class="text-muted small"><i class="fa-solid fa-layer-group me-1 text-primary"></i>${comp.sector}</span>
                                 </div>
                                 ${statusBadge}
                             </div>
-                            
-                            <hr class="my-3 opacity-10">
 
-                            <div class="row g-2 my-2 text-center">
+                            <div class="row g-2 my-3 text-center">
                                 <div class="col-6">
-                                    <div class="bg-light p-2 rounded-3 border border-light">
-                                        <small class="text-muted d-block">تاريخ البداية</small>
-                                        <strong class="small text-dark">${comp.start}</strong>
+                                    <div class="bg-dark bg-opacity-50 p-2 rounded-3 border border-secondary border-opacity-10">
+                                        <small class="text-muted d-block extra-small">البداية</small>
+                                        <strong class="small text-white">${comp.start}</strong>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="bg-light p-2 rounded-3 border border-light">
-                                        <small class="text-muted d-block">تاريخ النهاية</small>
+                                    <div class="bg-dark bg-opacity-50 p-2 rounded-3 border border-secondary border-opacity-10">
+                                        <small class="text-muted d-block extra-small">النهاية</small>
                                         <strong class="small text-danger">${comp.end}</strong>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="bg-warning bg-opacity-10 p-3 rounded-3 mb-3 d-flex justify-content-between align-items-center">
+                            <div class="bg-dark bg-opacity-60 p-3 rounded-3 mb-3 d-flex justify-content-between align-items-center border border-warning border-opacity-20">
                                 <div>
-                                    <small class="d-block text-muted">نوع وقيمة الضمان</small>
-                                    <strong class="small text-dark"><i class="fa-solid fa-shield-halved me-1 text-warning"></i>${comp.guaranteeType}</strong>
+                                    <small class="d-block text-muted extra-small">الضمان المقدم</small>
+                                    <strong class="small text-warning"><i class="fa-solid fa-shield-halved me-1"></i>${comp.guaranteeType}</strong>
                                 </div>
-                                <span class="fw-bold fs-5 text-dark">$${Number(comp.guarantee).toLocaleString()}</span>
+                                <span class="fw-extrabold fs-5 text-white">$${Number(comp.guarantee).toLocaleString()}</span>
                             </div>
 
                             <div class="d-grid gap-2">
-                                <button class="btn btn-primary rounded-3 fw-bold" onclick="openProgram('${comp.name}')">
-                                    <i class="fa-solid fa-right-to-bracket me-1"></i> دخول للبرنامج التشغيلي والمميزات
+                                <button class="btn btn-custom-primary py-2 fw-bold" onclick="openProgram('${comp.name}')">
+                                    <i class="fa-solid fa-right-to-bracket me-2"></i> دخول اللوحة التشغيلية
                                 </button>
                                 <div class="d-flex gap-2">
-                                    <button class="btn btn-outline-success btn-sm w-100 rounded-3" onclick="renewSub(${index})">تجديد سنة</button>
-                                    <button class="btn btn-outline-danger btn-sm rounded-3" onclick="deleteCompany(${index})"><i class="fa-solid fa-trash-can"></i></button>
+                                    <button class="btn btn-custom-success btn-sm w-100 py-2" onclick="renewSub(${originalIndex})"><i class="fa-solid fa-rotate me-1"></i> تجديد سنة</button>
+                                    <button class="btn btn-custom-warning btn-sm px-3 py-2" onclick="editCompany(${originalIndex})" title="تعديل"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="btn btn-custom-danger btn-sm px-3 py-2" onclick="deleteCompany(${originalIndex})" title="حذف"><i class="fa-solid fa-trash-can"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -493,12 +783,18 @@
                 `;
             });
 
-            const stringified = JSON.stringify(companies);
-            localStorage.setItem('vendor_companies_v2', stringified);
-            lastKnownData = stringified;
+            saveToStorage();
         }
 
-        // تحديث البيانات والإحصاءات تلقائياً
+        function filterCompanies() {
+            const term = document.getElementById('searchInput').value.toLowerCase().trim();
+            const filtered = companies.filter(c => 
+                c.name.toLowerCase().includes(term) || 
+                c.sector.toLowerCase().includes(term)
+            );
+            renderCompanies(filtered);
+        }
+
         function updateStats() {
             document.getElementById('totalCompanies').innerText = companies.length;
             const activeCount = companies.filter(c => new Date(c.end) >= new Date()).length;
@@ -511,7 +807,7 @@
             document.getElementById('platformRevenue').innerText = '$' + totalRev.toLocaleString();
         }
 
-        // تشغيل كاميرا مسح الفواتير
+        // ----- الكاميرا وتوثيق الفواتير -----
         async function openCameraModal() {
             const modal = new bootstrap.Modal(document.getElementById('cameraModal'));
             modal.show();
@@ -519,29 +815,59 @@
                 videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
                 document.getElementById('cameraStream').srcObject = videoStream;
             } catch (err) {
-                alert("لم يتم العثور على كاميرا أو تعذر الوصول للصلاحيات.");
+                alert("لم يتم العثور على كاميرا أو تعذر الحصول على الصلاحية.");
             }
         }
 
         function stopCamera() {
             if (videoStream) {
                 videoStream.getTracks().forEach(track => track.stop());
+                videoStream = null;
             }
         }
 
         function simulateScan() {
-            stopCamera();
             const modalEl = document.getElementById('cameraModal');
             const modal = bootstrap.Modal.getInstance(modalEl);
             modal.hide();
-            alert("تم مسح الفاتورة وقراءتها بنجاح! تم استخراج القيمة وربطها بالشركة.");
+            alert("تم مسح الفاتورة وقراءتها بنجاح! تم استخراج البيانات والتأكيد.");
         }
 
-        // حفظ شركة
+        // ----- النوافذ والإدارة -----
+        function openAddModal() {
+            document.getElementById('addCompanyForm').reset();
+            document.getElementById('editIndex').value = "-1";
+            document.getElementById('companyModalTitle').innerHTML = `<i class="fa-solid fa-building-circle-check text-info me-2"></i>تسجيل شركة جديدة`;
+            document.getElementById('saveCompanyBtn').innerText = "حفظ وتفعيل الاشتراك";
+            
+            const modal = new bootstrap.Modal(document.getElementById('addCompanyModal'));
+            modal.show();
+        }
+
+        function editCompany(index) {
+            const comp = companies[index];
+            document.getElementById('editIndex').value = index;
+            document.getElementById('compName').value = comp.name;
+            document.getElementById('compSector').value = comp.sector;
+            document.getElementById('subStart').value = comp.start;
+            document.getElementById('subEnd').value = comp.end;
+            document.getElementById('subPrice').value = comp.price;
+            document.getElementById('guaranteeAmount').value = comp.guarantee;
+            document.getElementById('guaranteeType').value = comp.guaranteeType;
+
+            document.getElementById('companyModalTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-warning me-2"></i>تعديل بيانات الشركة`;
+            document.getElementById('saveCompanyBtn').innerText = "حفظ التعديلات";
+
+            const modal = new bootstrap.Modal(document.getElementById('addCompanyModal'));
+            modal.show();
+        }
+
         function saveCompany(e) {
             e.preventDefault();
-            const newComp = {
-                id: Date.now(),
+            const editIndex = parseInt(document.getElementById('editIndex').value);
+
+            const compData = {
+                id: editIndex >= 0 ? companies[editIndex].id : Date.now(),
                 name: document.getElementById('compName').value,
                 sector: document.getElementById('compSector').value,
                 start: document.getElementById('subStart').value,
@@ -551,40 +877,56 @@
                 guaranteeType: document.getElementById('guaranteeType').value
             };
 
-            companies.push(newComp);
-            renderCompanies();
+            if (editIndex >= 0) {
+                companies[editIndex] = compData;
+            } else {
+                companies.push(compData);
+            }
+
+            filterCompanies();
             updateStats();
 
             const modal = bootstrap.Modal.getInstance(document.getElementById('addCompanyModal'));
             modal.hide();
-            document.getElementById('addCompanyForm').reset();
-        }
-
-        function openProgram(compName) {
-            document.getElementById('programTitle').innerText = 'لوحة تشغيل ومميزات: ' + compName;
-            const programModal = new bootstrap.Modal(document.getElementById('companyProgramModal'));
-            programModal.show();
         }
 
         function renewSub(index) {
             let currentEnd = new Date(companies[index].end);
             currentEnd.setFullYear(currentEnd.getFullYear() + 1);
             companies[index].end = currentEnd.toISOString().split('T')[0];
-            renderCompanies();
+            filterCompanies();
             updateStats();
-            alert('تم التجديد تلقائياً وثني التاريخ لسنة كاملة!');
+            alert('تم تجديد الاشتراك بنجاح وتمديده لسنة إضافية!');
         }
 
         function deleteCompany(index) {
-            if (confirm('تأكيد حذف الشركة بشكل نهائي؟')) {
+            if (confirm('هل أنت تأكد من إزالة هذه الشركة بشكل نهائي؟')) {
                 companies.splice(index, 1);
-                renderCompanies();
+                filterCompanies();
                 updateStats();
             }
         }
 
-        function logout() {
-            window.location.href = 'index.html';
+        function openProgram(compName) {
+            document.getElementById('programTitle').innerText = 'البيئة التشغيلية: ' + compName;
+            const programModal = new bootstrap.Modal(document.getElementById('companyProgramModal'));
+            programModal.show();
+        }
+
+        function saveToStorage() {
+            const stringified = JSON.stringify(companies);
+            localStorage.setItem('vendor_companies_v3', stringified);
+            lastKnownData = stringified;
+        }
+
+        function autoSyncData() {
+            const currentData = localStorage.getItem('vendor_companies_v3');
+            if (currentData && currentData !== lastKnownData) {
+                companies = JSON.parse(currentData);
+                filterCompanies();
+                updateStats();
+                lastKnownData = currentData;
+            }
         }
     </script>
 </body>
