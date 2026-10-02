@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم الفائقة - VendorCare Ultimate Pro</title>
+    <!-- Bootstrap 5 RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-bg: #0f172a;
+            --card-bg: #ffffff;
+            --accent-color: #0d6efd;
+            --success-color: #198754;
+            --warning-color: #ffc107;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f1f5f9;
+            color: #1e293b;
+        }
+        .navbar-custom {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+        }
+        .stat-card {
+            border: none;
+            border-radius: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--card-bg);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+        .stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+        }
+        .company-card {
+            border: none;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            background: #ffffff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            border-top: 5px solid var(--accent-color);
+            position: relative;
+            overflow: hidden;
+        }
+        .company-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        .badge-status {
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+        .modal-content {
+            border-radius: 24px;
+            border: none;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        #cameraStream {
+            width: 100%;
+            height: 280px;
+            background: #000;
+            border-radius: 16px;
+            object-fit: cover;
+        }
+        .scanner-overlay {
+            position: absolute;
+            top: 20%;
+            left: 15%;
+            width: 70%;
+            height: 60%;
+            border: 2px dashed #0ea5e9;
+            border-radius: 12px;
+            box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.4);
+        }
+        .feature-box {
+            border-radius: 16px;
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+        .feature-box:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 10px 20px rgba(13, 110, 253, 0.1);
+        }
+        .live-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px #22c55e;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- الشريط العلوي - مالك المنصة -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top py-3">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                <i class="fa-solid fa-shield-cat text-info fs-2"></i>
+                <span class="fs-4 fw-bold text-white">VendorCare <span class="badge bg-info text-dark fs-6">Ultimate Pro</span></span>
+            </a>
+            
+            <div class="d-flex align-items-center gap-3">
+                <div class="bg-white bg-opacity-10 px-3 py-1 rounded-pill d-flex align-items-center gap-2 border border-light border-opacity-10">
+                    <span class="live-dot"></span>
+                    <span class="text-light small fw-bold">تحديث تلقائي حي</span>
+                </div>
+                <button class="btn btn-warning rounded-pill px-3 btn-sm fw-bold" onclick="openCameraModal()">
+                    <i class="fa-solid fa-camera me-1"></i> ماسح الفواتير 📷
+                </button>
+                <div class="d-none d-md-flex align-items-center bg-white bg-opacity-10 px-3 py-2 rounded-pill border border-light border-opacity-10">
+                    <i class="fa-solid fa-crown text-warning me-2 fs-5"></i>
+                    <span class="text-light small">مالك المنصة: <strong id="ownerName">خضير العياس</strong></span>
+                </div>
+                <button class="btn btn-outline-danger btn-sm rounded-pill px-3 text-white border-light" onclick="logout()">
+                    <i class="fa-solid fa-power-off me-1"></i> خروج
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="container-fluid px-4 py-4">
+
+        <!-- الإحصائيات السريعة -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="card stat-card p-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small fw-semibold">إجمالي الشركات</span>
+                            <h3 class="fw-extrabold mb-0 mt-1" id="totalCompanies">0</h3>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-4 text-primary">
+                            <i class="fa-solid fa-building-circle-check fs-3"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card p-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small fw-semibold">الاشتراكات النشطة</span>
+                            <h3 class="fw-extrabold text-success mb-0 mt-1" id="activeSubs">0</h3>
+                        </div>
+                        <div class="bg-success bg-opacity-10 p-3 rounded-4 text-success">
+                            <i class="fa-solid fa-bolt fs-3"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card p-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small fw-semibold">الضمانات المالية</span>
+                            <h3 class="fw-extrabold text-warning mb-0 mt-1" id="totalGuarantees">$0</h3>
+                        </div>
+                        <div class="bg-warning bg-opacity-10 p-3 rounded-4 text-warning">
+                            <i class="fa-solid fa-vault fs-3"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card p-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small fw-semibold">أرباح المنصة</span>
+                            <h3 class="fw-extrabold text-info mb-0 mt-1" id="platformRevenue">$0</h3>
+                        </div>
+                        <div class="bg-info bg-opacity-10 p-3 rounded-4 text-info">
+                            <i class="fa-solid fa-chart-line fs-3"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- شريط التحكم والأدوات -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <h4 class="fw-bold m-0">إدارة الشركات والاشتراكات</h4>
+                <p class="text-muted small m-0">إدارة العقود، الضمانات المصرفية، ومتابعة الأنشطة المباشرة</p>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-dark rounded-pill px-3" onclick="window.print()">
+                    <i class="fa-solid fa-print me-1"></i> طباعة التقرير
+                </button>
+                <button class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#addCompanyModal">
+                    <i class="fa-solid fa-plus me-1"></i> إضافة شركة جديدة
+                </button>
+            </div>
+        </div>
+
+        <!-- شبكة عرض الشركات -->
+        <div class="row g-4" id="companiesGrid"></div>
+    </div>
+
+    <!-- نافذة ماسح الكاميرا للفواتير -->
+    <div class="modal fade" id="cameraModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white rounded-top-4">
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-camera me-2 text-warning"></i>ماسح الفواتير التلقائي (الكاميرا)</h5>
+                    <button type="button" class="btn-close btn-close-white" onclick="stopCamera()" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center p-4">
+                    <div class="position-relative overflow-hidden mb-3">
+                        <video id="cameraStream" autoplay playsinline></video>
+                        <div class="scanner-overlay"></div>
+                    </div>
+                    <p class="text-muted small mb-3">وجه الكاميرا نحو باركود الفاتورة أو وصل الضمان المالي لمسحه فوراً</p>
+                    <button class="btn btn-success rounded-pill px-4 fw-bold w-100" onclick="simulateScan()">
+                        <i class="fa-solid fa-barcode me-2"></i> التقاط وقراءة الفاتورة تلقائياً
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة إضافة شركة جديدة -->
+    <div class="modal fade" id="addCompanyModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white rounded-top-4">
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-building-circle-check me-2 text-info"></i>تسجيل شركة جديدة بالمنصة</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="addCompanyForm" onsubmit="saveCompany(event)">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">اسم الشركة</label>
+                                <input type="text" id="compName" class="form-control rounded-3" required placeholder="شركة بابل للتوريدات">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">قطاع العمل</label>
+                                <input type="text" id="compSector" class="form-control rounded-3" required placeholder="التجارة العامة والمقاولات">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">بداية الاشتراك</label>
+                                <input type="date" id="subStart" class="form-control rounded-3" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">نهاية الاشتراك</label>
+                                <input type="date" id="subEnd" class="form-control rounded-3" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">رسوم الاشتراك ($)</label>
+                                <input type="number" id="subPrice" class="form-control rounded-3" required placeholder="1500">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">مبلغ الضمان المالي ($)</label>
+                                <input type="number" id="guaranteeAmount" class="form-control rounded-3" required placeholder="5000">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">نوع الضمان المقدم</label>
+                                <select id="guaranteeType" class="form-select rounded-3">
+                                    <option value="خطاب ضمان بنكي">خطاب ضمان بنكي (Bank Guarantee)</option>
+                                    <option value="عربون نقدي مالي">عربون نقدي أمانة (Cash Deposit)</option>
+                                    <option value="صك مصدق برسم أمانة">صك مصدق برسم أمانة (Certified Cheque)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-end">
+                            <button type="button" class="btn btn-light px-4 rounded-pill" data-bs-dismiss="modal">إلغاء</button>
+                            <button type="submit" class="btn btn-success px-4 rounded-pill fw-bold">حفظ وتفعيل الاشتراك</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة البيئة التشغيلية ومميزات الشركة المشتركة -->
+    <div class="modal fade" id="companyProgramModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title fw-bold" id="programTitle"><i class="fa-solid fa-laptop-code me-2 text-info"></i>لوحة تشغيل الشركة</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body bg-light p-4">
+                    <div class="container">
+                        <div class="alert alert-success d-flex align-items-center rounded-4 shadow-sm" role="alert">
+                            <i class="fa-solid fa-circle-check fs-2 me-3"></i>
+                            <div>
+                                <strong class="fs-5">البيئة التشغيلية والمميزات الفائقة مفعلة بالكامل!</strong>
+                                <div>جميع أدوات المبيعات، رابط المتجر، الباركوود، والتقارير متاحة لهذه الشركة.</div>
+                            </div>
+                        </div>
+
+                        <!-- أدوات التشغيل الأساسية -->
+                        <h5 class="fw-bold my-3"><i class="fa-solid fa-cubes text-primary me-2"></i>أنظمة الإدارة الأساسية:</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <div class="feature-box text-center shadow-sm">
+                                    <i class="fa-solid fa-boxes-stacked text-primary fs-1 mb-3"></i>
+                                    <h5 class="fw-bold">المخزون والمنتجات</h5>
+                                    <p class="text-muted small">متابعة الكميات الجاهزة للتوريد والطلب</p>
+                                    <button class="btn btn-primary btn-sm rounded-pill px-4" onclick="alert('جاري فتح قاعدة مخازن الشركة...')">تشغيل الوحدة</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="feature-box text-center shadow-sm">
+                                    <i class="fa-solid fa-receipt text-success fs-1 mb-3"></i>
+                                    <h5 class="fw-bold">الفواتير الذكية</h5>
+                                    <p class="text-muted small">إصدار الفواتير وقراءتها بالكاميرا</p>
+                                    <button class="btn btn-success btn-sm rounded-pill px-4" onclick="openCameraModal()">مسح فاتورة جديدة 📷</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="feature-box text-center shadow-sm">
+                                    <i class="fa-solid fa-users-gear text-warning fs-1 mb-3"></i>
+                                    <h5 class="fw-bold">فريق العمل والصلاحيات</h5>
+                                    <p class="text-muted small">إدارة الموظفين وأذونات الوصول</p>
+                                    <button class="btn btn-warning btn-sm rounded-pill px-4" onclick="alert('جاري عرض شجرة الموظفين...')">عرض الكادر</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- باقة المميزات الحصرية المضافة للشركة -->
+                        <h5 class="fw-bold my-3"><i class="fa-solid fa-star text-warning me-2"></i>المميزات الحصرية المتاحة للشركة المشتركة:</h5>
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <div class="card p-3 border-0 shadow-sm rounded-4 text-center">
+                                    <i class="fa-solid fa-store text-info fs-2 mb-2"></i>
+                                    <h6 class="fw-bold">رابط متجر إلكتروني</h6>
+                                    <p class="text-muted extra-small">رابط خاص لمشاركة المنتجات مع العملاء</p>
+                                    <button class="btn btn-outline-info btn-sm rounded-pill" onclick="alert('تم نسخ رابط المتجر الإلكتروني الخاص بالشركة!')"><i class="fa-solid fa-link me-1"></i>نسخ الرابط</button>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card p-3 border-0 shadow-sm rounded-4 text-center">
+                                    <i class="fa-solid fa-qrcode text-dark fs-2 mb-2"></i>
+                                    <h6 class="fw-bold">رمز QR للشركة</h6>
+                                    <p class="text-muted extra-small">رمز استجابة سريع يوضع على المطبوعات</p>
+                                    <button class="btn btn-outline-dark btn-sm rounded-pill" onclick="alert('جاري تحميل كود الـ QR الخاص بالشركة...')"><i class="fa-solid fa-download me-1"></i>تحميل الـ QR</button>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card p-3 border-0 shadow-sm rounded-4 text-center">
+                                    <i class="fa-solid fa-file-excel text-success fs-2 mb-2"></i>
+                                    <h6 class="fw-bold">تصدير تقارير Excel</h6>
+                                    <p class="text-muted extra-small">تصدير الفواتير والعمليات اليومية</p>
+                                    <button class="btn btn-outline-success btn-sm rounded-pill" onclick="alert('تم تصدير كشف الحساب والعمليات إلى ملف Excel بنجاح!')"><i class="fa-solid fa-file-export me-1"></i>تصدير الكشف</button>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card p-3 border-0 shadow-sm rounded-4 text-center">
+                                    <i class="fa-solid fa-headset text-danger fs-2 mb-2"></i>
+                                    <h6 class="fw-bold">الدعم الفني المباشر</h6>
+                                    <p class="text-muted extra-small">تواصل مباشر وسريع مع إدارة المنصة</p>
+                                    <button class="btn btn-outline-danger btn-sm rounded-pill" onclick="alert('جاري تحويلك لفتح تذكرة دعم مباشر مع المالك...')"><i class="fa-solid fa-comments me-1"></i>تواصل الآن</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let videoStream = null;
+        let lastKnownData = "";
+
+        // البيانات التفاعلية
+        let companies = JSON.parse(localStorage.getItem('vendor_companies_v2')) || [
+            {
+                id: 1,
+                name: "شركة الرافدين للتجارة العامة",
+                sector: "التوريدات والحلول اللوجستية",
+                start: "2026-01-01",
+                end: "2026-12-31",
+                price: 1800,
+                guarantee: 12000,
+                guaranteeType: "خطاب ضمان بنكي"
+            },
+            {
+                id: 2,
+                name: "مؤسسة دجلة للتكنولوجيا",
+                sector: "الأنظمة والذكاء الاصطناعي",
+                start: "2026-02-15",
+                end: "2026-11-15",
+                price: 2500,
+                guarantee: 20000,
+                guaranteeType: "عربون نقدي مالي"
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCompanies();
+            updateStats();
+            
+            // تفعيل نظام المزامنة والتحديث التلقائي الحي كل 3 ثوانٍ
+            setInterval(autoSyncData, 3000);
+        });
+
+        // آلية التحديث والمزامنة التلقائية الحية
+        function autoSyncData() {
+            const currentData = localStorage.getItem('vendor_companies_v2');
+            if (currentData && currentData !== lastKnownData) {
+                companies = JSON.parse(currentData);
+                renderCompanies();
+                updateStats();
+                lastKnownData = currentData;
+            }
+        }
+
+        // عرض بطاقات الشركات
+        function renderCompanies() {
+            const grid = document.getElementById('companiesGrid');
+            grid.innerHTML = '';
+
+            companies.forEach((comp, index) => {
+                const isActive = new Date(comp.end) >= new Date();
+                const statusBadge = isActive 
+                    ? `<span class="badge bg-success-subtle text-success badge-status"><i class="fa-solid fa-circle-check me-1"></i>اشتراك نشط</span>`
+                    : `<span class="badge bg-danger-subtle text-danger badge-status"><i class="fa-solid fa-circle-xmark me-1"></i>منتهي</span>`;
+
+                grid.innerHTML += `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card company-card p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h5 class="fw-bold mb-1 text-dark">${comp.name}</h5>
+                                    <span class="text-muted small"><i class="fa-solid fa-layer-group me-1"></i>${comp.sector}</span>
+                                </div>
+                                ${statusBadge}
+                            </div>
+                            
+                            <hr class="my-3 opacity-10">
+
+                            <div class="row g-2 my-2 text-center">
+                                <div class="col-6">
+                                    <div class="bg-light p-2 rounded-3 border border-light">
+                                        <small class="text-muted d-block">تاريخ البداية</small>
+                                        <strong class="small text-dark">${comp.start}</strong>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="bg-light p-2 rounded-3 border border-light">
+                                        <small class="text-muted d-block">تاريخ النهاية</small>
+                                        <strong class="small text-danger">${comp.end}</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-warning bg-opacity-10 p-3 rounded-3 mb-3 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <small class="d-block text-muted">نوع وقيمة الضمان</small>
+                                    <strong class="small text-dark"><i class="fa-solid fa-shield-halved me-1 text-warning"></i>${comp.guaranteeType}</strong>
+                                </div>
+                                <span class="fw-bold fs-5 text-dark">$${Number(comp.guarantee).toLocaleString()}</span>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary rounded-3 fw-bold" onclick="openProgram('${comp.name}')">
+                                    <i class="fa-solid fa-right-to-bracket me-1"></i> دخول للبرنامج التشغيلي والمميزات
+                                </button>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-outline-success btn-sm w-100 rounded-3" onclick="renewSub(${index})">تجديد سنة</button>
+                                    <button class="btn btn-outline-danger btn-sm rounded-3" onclick="deleteCompany(${index})"><i class="fa-solid fa-trash-can"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            const stringified = JSON.stringify(companies);
+            localStorage.setItem('vendor_companies_v2', stringified);
+            lastKnownData = stringified;
+        }
+
+        // تحديث البيانات والإحصاءات تلقائياً
+        function updateStats() {
+            document.getElementById('totalCompanies').innerText = companies.length;
+            const activeCount = companies.filter(c => new Date(c.end) >= new Date()).length;
+            document.getElementById('activeSubs').innerText = activeCount;
+
+            const totalGuar = companies.reduce((sum, c) => sum + Number(c.guarantee), 0);
+            document.getElementById('totalGuarantees').innerText = '$' + totalGuar.toLocaleString();
+
+            const totalRev = companies.reduce((sum, c) => sum + Number(c.price), 0);
+            document.getElementById('platformRevenue').innerText = '$' + totalRev.toLocaleString();
+        }
+
+        // تشغيل كاميرا مسح الفواتير
+        async function openCameraModal() {
+            const modal = new bootstrap.Modal(document.getElementById('cameraModal'));
+            modal.show();
+            try {
+                videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+                document.getElementById('cameraStream').srcObject = videoStream;
+            } catch (err) {
+                alert("لم يتم العثور على كاميرا أو تعذر الوصول للصلاحيات.");
+            }
+        }
+
+        function stopCamera() {
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+            }
+        }
+
+        function simulateScan() {
+            stopCamera();
+            const modalEl = document.getElementById('cameraModal');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            modal.hide();
+            alert("تم مسح الفاتورة وقراءتها بنجاح! تم استخراج القيمة وربطها بالشركة.");
+        }
+
+        // حفظ شركة
+        function saveCompany(e) {
+            e.preventDefault();
+            const newComp = {
+                id: Date.now(),
+                name: document.getElementById('compName').value,
+                sector: document.getElementById('compSector').value,
+                start: document.getElementById('subStart').value,
+                end: document.getElementById('subEnd').value,
+                price: document.getElementById('subPrice').value,
+                guarantee: document.getElementById('guaranteeAmount').value,
+                guaranteeType: document.getElementById('guaranteeType').value
+            };
+
+            companies.push(newComp);
+            renderCompanies();
+            updateStats();
+
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addCompanyModal'));
+            modal.hide();
+            document.getElementById('addCompanyForm').reset();
+        }
+
+        function openProgram(compName) {
+            document.getElementById('programTitle').innerText = 'لوحة تشغيل ومميزات: ' + compName;
+            const programModal = new bootstrap.Modal(document.getElementById('companyProgramModal'));
+            programModal.show();
+        }
+
+        function renewSub(index) {
+            let currentEnd = new Date(companies[index].end);
+            currentEnd.setFullYear(currentEnd.getFullYear() + 1);
+            companies[index].end = currentEnd.toISOString().split('T')[0];
+            renderCompanies();
+            updateStats();
+            alert('تم التجديد تلقائياً وثني التاريخ لسنة كاملة!');
+        }
+
+        function deleteCompany(index) {
+            if (confirm('تأكيد حذف الشركة بشكل نهائي؟')) {
+                companies.splice(index, 1);
+                renderCompanies();
+                updateStats();
+            }
+        }
+
+        function logout() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
