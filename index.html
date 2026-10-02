@@ -309,6 +309,13 @@ try {
             const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             if (error) throw error;
             showAlert('تم تسجيل الدخول بنجاح!', true);
+            try {
+    const { data, error } = await supabaseClient...
+    if (error) throw error;
+    showAlert('تم تسجيل الدخول بنجاح!', true);
+    window.location.href = 'dashboard.html';
+} catch (err) {
+
         } catch (err) {
             showAlert('خطأ في الدخول: ' + err.message);
         }
