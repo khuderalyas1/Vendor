@@ -236,15 +236,19 @@
 </div>
 
 <script>
-    // الإعدادات الآمنة لـ Supabase دون أخطاء إعادة التعريف
-    window.SUPABASE_URL = window.SUPABASE_URL || 'hhttps://cxmfibseowubsmqdcixk.supabase.cottps://your-supabase-url.supabase.co';
-    window.SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'sb_publishable_vip7m_r8weuMh5cARX88ng_uUzndPfF-anon-key-here';
+    // التهيئة المباشرة لـ Supabase
+window.SUPABASE_URL = 'https://cxmfibseowubsmqdcixk.supabase.co';
+window.SUPABASE_ANON_KEY = 'sb_publishable_vip7m_r8w...';
 
-    // التهيئة الآمنة للعميل
-    let supabaseClient = null;
+let supabaseClient = null;
+try {
     if (typeof supabase !== 'undefined' && supabase.createClient) {
         supabaseClient = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
     }
+} catch (e) {
+    console.error("Supabase Error:", e);
+}
+
 
     // التنقل بين التبويبات
     function switchTab(tab) {
